@@ -26,7 +26,6 @@ class Ticket extends Model
         'deleted_at' => 'datetime',
     ];
 
-    // Enums for easy reference
     const CATEGORY_TECHNICAL = 'technical';
     const CATEGORY_BILLING = 'billing';
     const CATEGORY_GENERAL = 'general';
