@@ -153,6 +153,50 @@ class TicketController extends Controller
         return response()->json($ticket->load(['user', 'assignee']));
     }
 
+    public function search(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $query = Ticket::with(['user', 'assignee']);
+
+        if ($user->isUser()) {
+            $query->where('user_id', $user->id);
+        } elseif ($user->isAgent()) {
+            $query->where(function ($q) use ($user) {
+                $q->where('assigned_to', $user->id)
+                    ->orWhereNull('assigned_to');
+            });
+        }
+
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                    ->orWhere('description', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        if ($request->has('statuses')) {
+            $query->whereIn('status', explode(',', $request->statuses));
+        }
+
+        if ($request->has('priorities')) {
+            $query->whereIn('priority', explode(',', $request->priorities));
+        }
+
+        if ($request->has('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->has('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $tickets = $query->latest()->paginate($request->per_page ?? 15);
+
+        return response()->json($tickets);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
