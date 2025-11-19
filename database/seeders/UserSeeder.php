@@ -1,5 +1,4 @@
 <?php
-// database/seeders/UserSeeder.php
 
 namespace Database\Seeders;
 
@@ -16,8 +15,13 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory()->count(3)->agent()->create([
-        ]);
+        User::factory()->create(([
+            'name' => 'Agent User',
+            'email' => 'agent@tickets.com',
+            'role' => 'agent'
+        ]));
+
+        User::factory()->count(3)->agent()->create([]);
 
         User::factory()->count(10)->user()->create();
     }

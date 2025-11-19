@@ -99,6 +99,28 @@ class Ticket extends Model
         return $query->where('priority', self::PRIORITY_HIGH);
     }
 
+    public function scopeOpenOrInProgress($query)
+    {
+        return $query->whereIn('status', [
+            self::STATUS_OPEN,
+            self::STATUS_IN_PROGRESS,
+        ]);
+    }
+
+    public function scopeResolvedOrClosed($query)
+    {
+        return $query->whereIn('status', [
+            self::STATUS_RESOLVED,
+            self::STATUS_CLOSED,
+        ]);
+    }
+
+    public function scopeUnassigned($query)
+    {
+        return $query->whereNull('assigned_to');
+    }
+
+
     public function assignTo(User $user): bool
     {
         if (!$user->canAssignTickets()) {
