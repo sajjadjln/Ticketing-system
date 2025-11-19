@@ -32,6 +32,11 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
     public function canBeEdited(): bool
     {
         return $this->created_at->diffInHours(now()) <= 1;

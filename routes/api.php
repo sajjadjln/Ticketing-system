@@ -7,6 +7,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\TicketAssignmentController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\AttachmentController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -34,4 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/stats/agents', [StatsController::class, 'agentPerformance']);
     });
+
+    Route::get('tickets/{ticket}/attachments', [AttachmentController::class, 'index']);
+    Route::post('tickets/{ticket}/attachments', [AttachmentController::class, 'store']);
+    Route::delete('attachments/{attachment}', [AttachmentController::class, 'destroy']);
+    Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])
+        ->name('attachments.download');
 });

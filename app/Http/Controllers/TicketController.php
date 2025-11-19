@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\User;
 use App\Notifications\TicketCreatedNotification;
+use App\Http\Requests\StoreTicketWithAttachmentsRequest;
+use App\Models\Attachment;
 class TicketController extends Controller
 {
     /**
@@ -57,14 +59,8 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTicketWithAttachmentsRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category' => 'required|in:technical,billing,general,other',
-            'priority' => 'required|in:low,medium,high',
-        ]);
 
         $ticket = Ticket::create([
             'user_id' => $request->user()->id,
@@ -74,6 +70,21 @@ class TicketController extends Controller
             'priority' => $request->priority,
             'status' => 'open',
         ]);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('attachments/' . date('Y/m'));
+
+                Attachment::create([
+                    'filename' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                    'ticket_id' => $ticket->id,
+                    'user_id' => $request->user()->id,
+                ]);
+            }
+        }
 
         $adminsAndAgents = User::whereIn('role', ['admin', 'agent'])->get();
         foreach ($adminsAndAgents as $user) {

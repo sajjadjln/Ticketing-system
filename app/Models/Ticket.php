@@ -55,6 +55,10 @@ class Ticket extends Model
         return $this->hasMany(Comment::class)->oldest();
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
     public function latestComment()
     {
         return $this->hasOne(Comment::class)->latest();
