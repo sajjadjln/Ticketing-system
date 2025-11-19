@@ -202,7 +202,6 @@ attachments
 - PHP 8.1+
 - Composer
 - MySQL 8.0+
-- Node.js (for frontend, optional)
 
 ### Step-by-Step Setup
 
@@ -262,7 +261,6 @@ docker run -d -p 1025:1025 -p 8025:8025 axllent/mailpit
 7. **Access the application**
 ```
 API Server: http://localhost:8000
-API Docs: http://localhost:8000/api/documentation
 Mailpit: http://localhost:8025
 ```
 
