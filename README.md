@@ -1,59 +1,432 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎫 Ticketing System - Laravel Backend API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A comprehensive, production-ready ticketing system built with Laravel that provides complete support ticket management with role-based access control, real-time notifications, file attachments, and comprehensive API documentation.
 
-## About Laravel
+## 📋 Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Database Schema](#-database-schema)
+- [API Endpoints](#-api-endpoints)
+- [Installation](#-installation)
+- [Testing](#-testing)
+- [Role-Based Access Control](#-role-based-access-control)
+- [Business Logic](#-business-logic)
+- [API Documentation](#-api-documentation)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🔐 Authentication & Authorization
+- **JWT-based Authentication** using Laravel Sanctum
+- **Role-Based Access Control** (User, Agent, Admin)
+- **Secure password hashing** with bcrypt
+- **Token-based API authentication**
 
-## Learning Laravel
+### 🎫 Ticket Management
+- **Create, read, update, delete tickets**
+- **Ticket categorization** (Technical, Billing, General, Other)
+- **Priority levels** (Low, Medium, High)
+- **Status workflow** (Open → In Progress → Resolved → Closed)
+- **Smart ticket assignment** to least busy agents
+- **Advanced filtering & search** by status, priority, category
+- **Pagination** for large datasets
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 💬 Communication System
+- **Real-time comments** on tickets
+- **Comment editing** within 1-hour window
+- **Role-based comment visibility**
+- **Prevent comments on closed tickets**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📎 File Attachments
+- **File uploads** for tickets and comments
+- **Multiple file type support** (images, PDFs, documents, archives)
+- **File size validation** (10MB max per file)
+- **Secure file storage** with access control
+- **File download with authentication**
 
-## Laravel Sponsors
+### 🔔 Notifications & Email
+- **Automated email notifications** for key events
+- **Queueable email system** for better performance
+- **Event-driven architecture** for extensibility
+- **Notification scenarios**:
+  - Ticket creation (notifies admins/agents)
+  - Ticket assignment (notifies assigned agent)
+  - New comments (notifies ticket owner & assignee)
+  - Status changes (notifies ticket owner)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📊 Analytics & Reporting
+- **Role-based dashboard statistics**
+- **Ticket metrics** by status, priority, category
+- **Agent performance tracking**
+- **Workload distribution analysis**
 
-### Premium Partners
+### 🛡️ Security & Validation
+- **Input validation** with Form Requests
+- **SQL injection prevention** with Eloquent ORM
+- **XSS protection** with output sanitization
+- **Rate limiting** on API endpoints
+- **CORS configuration**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠 Tech Stack
 
-## Contributing
+**Backend:**
+- Laravel 10.x
+- PHP 8.1+
+- Laravel Sanctum (API Authentication)
+- Laravel Notifications (Email)
+- Laravel Queue (Background jobs)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Database:**
+- MySQL 8.0+
+- Eloquent ORM
+- Database migrations & seeders
 
-## Code of Conduct
+**Testing:**
+- PHPUnit
+- Laravel Testing Helpers
+- Database transactions for test isolation
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Tools:**
+- Mailpit (Email testing)
+- Swagger/OpenAPI (Documentation)
+- Composer (Dependency management)
 
-## Security Vulnerabilities
+## 🗄 Database Schema
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```sql
+users
+├── id (PK)
+├── name
+├── email (unique)
+├── password (hashed)
+├── role (enum: user, agent, admin)
+├── created_at
+└── updated_at
 
-## License
+tickets
+├── id (PK)
+├── user_id (FK to users)           # Ticket creator
+├── assigned_to (FK to users)       # Assigned agent
+├── title
+├── description (TEXT)
+├── category (enum: technical, billing, general, other)
+├── priority (enum: low, medium, high)
+├── status (enum: open, in_progress, resolved, closed)
+├── created_at
+└── updated_at
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+comments
+├── id (PK)
+├── ticket_id (FK to tickets)
+├── user_id (FK to users)
+├── comment_text (TEXT)
+├── created_at
+└── updated_at
+
+attachments
+├── id (PK)
+├── ticket_id (FK to tickets)
+├── comment_id (FK to comments, nullable)
+├── user_id (FK to users)
+├── filename
+├── path (storage path)
+├── mime_type
+├── size (bytes)
+├── created_at
+└── updated_at
+```
+
+### 🔑 Key Relationships
+
+- **User** → hasMany **Tickets** (as creator)
+- **User** → hasMany **Tickets** (as assignee)
+- **User** → hasMany **Comments**
+- **Ticket** → belongsTo **User** (creator)
+- **Ticket** → belongsTo **User** (assignee)
+- **Ticket** → hasMany **Comments**
+- **Ticket** → hasMany **Attachments**
+- **Comment** → belongsTo **Ticket**
+- **Comment** → belongsTo **User**
+- **Comment** → hasMany **Attachments**
+- **Attachment** → belongsTo **Ticket**
+- **Attachment** → belongsTo **Comment** (optional)
+- **Attachment** → belongsTo **User**
+
+## 🌐 API Endpoints
+
+### Authentication
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/register` | Register new user | No |
+| POST | `/api/login` | Login user | No |
+| POST | `/api/logout` | Logout user | Yes |
+| GET | `/api/user` | Get current user | Yes |
+
+### Tickets
+| Method | Endpoint | Description | Roles |
+|--------|----------|-------------|-------|
+| GET | `/api/tickets` | List tickets | All |
+| POST | `/api/tickets` | Create ticket | User+ |
+| GET | `/api/tickets/{id}` | Get ticket | Owner/Agent/Admin |
+| PUT | `/api/tickets/{id}` | Update ticket | Owner/Agent/Admin |
+| DELETE | `/api/tickets/{id}` | Delete ticket | Owner/Admin |
+| GET | `/api/tickets/search` | Search tickets | All |
+
+### Comments
+| Method | Endpoint | Description | Roles |
+|--------|----------|-------------|-------|
+| GET | `/api/tickets/{id}/comments` | Get comments | Owner/Agent/Admin |
+| POST | `/api/tickets/{id}/comments` | Add comment | Owner/Agent/Admin |
+| PUT | `/api/comments/{id}` | Update comment | Comment Author |
+| DELETE | `/api/comments/{id}` | Delete comment | Author/Admin |
+
+### Attachments
+| Method | Endpoint | Description | Roles |
+|--------|----------|-------------|-------|
+| POST | `/api/tickets/{id}/attachments` | Upload file | Owner/Agent/Admin |
+| GET | `/api/tickets/{id}/attachments` | List attachments | Owner/Agent/Admin |
+| GET | `/api/attachments/{id}/download` | Download file | Owner/Agent/Admin |
+| DELETE | `/api/attachments/{id}` | Delete attachment | Uploader/Admin |
+
+### Assignment & Stats
+| Method | Endpoint | Description | Roles |
+|--------|----------|-------------|-------|
+| POST | `/api/tickets/{id}/assign` | Assign to agent | Agent/Admin |
+| POST | `/api/tickets/{id}/auto-assign` | Auto-assign | Agent/Admin |
+| POST | `/api/tickets/{id}/unassign` | Unassign ticket | Agent/Admin |
+| GET | `/api/stats/dashboard` | Get statistics | All |
+
+## ⚙️ Installation
+
+### Prerequisites
+- PHP 8.1+
+- Composer
+- MySQL 8.0+
+- Node.js (for frontend, optional)
+
+### Step-by-Step Setup
+
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd ticketing-system
+```
+
+2. **Install dependencies**
+```bash
+composer install
+```
+
+3. **Environment configuration**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+4. **Update .env file**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ticketing_system
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+MAIL_MAILER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+
+QUEUE_CONNECTION=database
+```
+
+5. **Database setup**
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+6. **Start services**
+```bash
+# Start Laravel development server
+php artisan serve
+
+# Start queue worker (in separate terminal)
+php artisan queue:work
+
+# Start Mailpit for email testing (in separate terminal)
+docker run -d -p 1025:1025 -p 8025:8025 axllent/mailpit
+```
+
+7. **Access the application**
+```
+API Server: http://localhost:8000
+API Docs: http://localhost:8000/api/documentation
+Mailpit: http://localhost:8025
+```
+
+## 🧪 Testing
+
+### Run Test Suite
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test group
+php artisan test --filter=AuthTest
+php artisan test --filter=TicketTest
+php artisan test --filter=CommentTest
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Test Data
+The system comes with seeded test data:
+- **Admin**: `admin@tickets.com` / `password`
+- **Agents**: 3 pre-created agents
+- **Users**: 10 test users
+- **Tickets**: 50+ tickets with various statuses
+
+### Manual Testing with Postman
+1. Import the Postman collection from `/docs/postman-collection.json`
+2. Set base URL to `http://localhost:8000/api`
+3. Use the provided test credentials
+
+## 👥 Role-Based Access Control
+
+### User Roles & Permissions
+
+| Role | Ticket Access | Comment Access | Assignment | Admin Features |
+|------|---------------|----------------|------------|----------------|
+| **User** | Own tickets only | On own tickets | ❌ No | ❌ No |
+| **Agent** | Assigned + unassigned | On accessible tickets | ✅ Yes | ❌ No |
+| **Admin** | All tickets | On all tickets | ✅ Yes | ✅ Yes |
+
+### Detailed Permissions Matrix
+
+| Action | User | Agent | Admin |
+|--------|------|-------|-------|
+| Create ticket | ✅ | ✅ | ✅ |
+| View own tickets | ✅ | ✅ | ✅ |
+| View all tickets | ❌ | ❌ | ✅ |
+| View assigned tickets | ❌ | ✅ | ✅ |
+| Update ticket (basic) | ✅ | ✅ | ✅ |
+| Update ticket status | ❌ | ✅ | ✅ |
+| Assign tickets | ❌ | ✅ | ✅ |
+| Delete ticket | ✅ (own) | ❌ | ✅ |
+| Add comments | ✅ (own) | ✅ (assigned) | ✅ |
+| Edit comments | ✅ (own, 1h) | ✅ (own, 1h) | ✅ |
+| Delete comments | ✅ (own) | ✅ (own) | ✅ |
+| Upload attachments | ✅ (own) | ✅ (assigned) | ✅ |
+| View statistics | Basic | Agent stats | Full |
+
+## 🔄 Business Logic
+
+### Ticket Status Workflow
+```
+Open
+  ↓
+In Progress ←→ Resolved
+  ↓            ↓
+Closed ←───────┘
+```
+
+**Valid transitions:**
+- `open` → `in_progress`, `closed`
+- `in_progress` → `resolved`, `closed`
+- `resolved` → `closed`
+- `closed` → (no transitions)
+
+### Auto-Assignment Algorithm
+```php
+User::where('role', 'agent')
+    ->withCount(['assignedTickets' => function ($query) {
+        $query->whereIn('status', ['open', 'in_progress']);
+    }])
+    ->orderBy('assigned_tickets_count')
+    ->first();
+```
+
+### Comment Editing Rules
+- Users can edit their own comments within **1 hour** of creation
+- Comments cannot be edited on **closed tickets**
+- Admin can delete any comment
+
+### File Upload Restrictions
+- **Max file size**: 10MB
+- **Allowed types**: Images, PDFs, Documents, Archives
+- **Storage**: Organized by year/month in `storage/app/attachments/`
+
+## 📚 API Documentation
+
+### Access Swagger UI
+Visit `http://localhost:8000/api/documentation` for interactive API documentation.
+
+### Generate Documentation
+```bash
+php artisan l5-swagger:generate
+```
+
+### Documentation Features
+- **Interactive testing** of all endpoints
+- **Authentication integration** with Bearer tokens
+- **Request/response schemas**
+- **Error code documentation**
+- **Parameter descriptions**
+
+## 🚀 Deployment
+
+### Production Checklist
+- [ ] Update `.env` with production values
+- [ ] Set `APP_ENV=production`
+- [ ] Configure production database
+- [ ] Set up Redis for queues
+- [ ] Configure production email (Mailgun, SendGrid, etc.)
+- [ ] Set up SSL certificate
+- [ ] Configure web server (Nginx/Apache)
+- [ ] Set up monitoring and logging
+
+### Environment Variables
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://yourdomain.com
+
+DB_HOST=production-db-host
+DB_DATABASE=production_db
+DB_USERNAME=production_user
+DB_PASSWORD=production_password
+
+MAIL_MAILER=smtp
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+
+QUEUE_CONNECTION=redis
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Check the API documentation at `/api/documentation`
+- Review the test cases for usage examples
+- Examine the database seeders for sample data structure
+
+---
+
+**Built with ❤️ using Laravel** - A production-ready ticketing system that demonstrates modern PHP development practices, comprehensive testing, and scalable architecture.
