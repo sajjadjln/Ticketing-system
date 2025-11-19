@@ -1,8 +1,8 @@
-# 🎫 Ticketing System - Laravel Backend API
+# Ticketing System - Laravel Backend API
 
 A comprehensive, production-ready ticketing system built with Laravel that provides complete support ticket management with role-based access control, real-time notifications, file attachments, and comprehensive API documentation.
 
-## 📋 Table of Contents
+## Table of Contents
 
 -   [Features](#-features)
 -   [Tech Stack](#-tech-stack)
@@ -14,16 +14,16 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
 -   [Business Logic](#-business-logic)
 -   [API Documentation](#-api-documentation)
 
-## 🚀 Features
+## Features
 
-### 🔐 Authentication & Authorization
+### Authentication & Authorization
 
 -   **JWT-based Authentication** using Laravel Sanctum
 -   **Role-Based Access Control** (User, Agent, Admin)
 -   **Secure password hashing** with bcrypt
 -   **Token-based API authentication**
 
-### 🎫 Ticket Management
+### Ticket Management
 
 -   **Create, read, update, delete tickets**
 -   **Ticket categorization** (Technical, Billing, General, Other)
@@ -33,14 +33,14 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
 -   **Advanced filtering & search** by status, priority, category
 -   **Pagination** for large datasets
 
-### 💬 Communication System
+### Communication System
 
 -   **Real-time comments** on tickets
 -   **Comment editing** within 1-hour window
 -   **Role-based comment visibility**
 -   **Prevent comments on closed tickets**
 
-### 📎 File Attachments
+### File Attachments
 
 -   **File uploads** for tickets and comments
 -   **Multiple file type support** (images, PDFs, documents, archives)
@@ -48,7 +48,7 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
 -   **Secure file storage** with access control
 -   **File download with authentication**
 
-### 🔔 Notifications & Email
+### Notifications & Email
 
 -   **Automated email notifications** for key events
 -   **Event-driven architecture** for extensibility
@@ -58,7 +58,7 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
     -   New comments (notifies ticket owner & assignee)
     -   Status changes (notifies ticket owner)
 
-### 📊 Analytics & Reporting
+### Analytics & Reporting
 
 -   **Role-based dashboard statistics**
 -   **Ticket metrics** by status, priority, category
@@ -70,7 +70,7 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
 -   **Postman josn file including all the requests is in the project**
     Ticketing System API.postman_collection.json
 
-## 🛠 Tech Stack
+## Tech Stack
 
 **Backend:**
 
@@ -97,7 +97,7 @@ A comprehensive, production-ready ticketing system built with Laravel that provi
 -   Postman (Documentation)
 -   Composer (Dependency management)
 
-## 🗄 Database Schema
+## Database Schema
 
 ```sql
 users
@@ -142,7 +142,7 @@ attachments
 └── updated_at
 ```
 
-### 🔑 Key Relationships
+### Key Relationships
 
 -   **User** → hasMany **Tickets** (as creator)
 -   **User** → hasMany **Tickets** (as assignee)
@@ -158,7 +158,7 @@ attachments
 -   **Attachment** → belongsTo **Comment** (optional)
 -   **Attachment** → belongsTo **User**
 
-## 🌐 API Endpoints
+## API Endpoints
 
 ### Authentication
 
@@ -279,7 +279,7 @@ API Server: http://localhost:8000
 Mailpit: http://localhost:8025
 ```
 
-## 🧪 Testing
+## Testing
 
 ### Run Test Suite
 
@@ -311,7 +311,7 @@ The system comes with seeded test data:
 2. Set base URL to `http://localhost:8000/api`
 3. Use the provided test credentials
 
-## 👥 Role-Based Access Control
+## Role-Based Access Control
 
 ### User Roles & Permissions
 
@@ -339,7 +339,7 @@ The system comes with seeded test data:
 | Upload attachments    | ✅ (own)     | ✅ (assigned) | ✅    |
 | View statistics       | Basic        | Agent stats   | Full  |
 
-## 🔄 Business Logic
+## Business Logic
 
 ### Ticket Status Workflow
 
@@ -381,13 +381,13 @@ User::where('role', 'agent')
 -   **Allowed types**: Images, PDFs, Documents, Archives
 -   **Storage**: Organized by year/month in `storage/app/attachments/`
 
-## 📚 API Documentation
+## API Documentation
 
 ### Postman collection
 
 just import the postman collection to the postman
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
@@ -395,7 +395,7 @@ just import the postman collection to the postman
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
