@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
+use App\Models\User;
+use App\Notifications\TicketCreatedNotification;
 class TicketController extends Controller
 {
     /**
@@ -73,6 +74,11 @@ class TicketController extends Controller
             'priority' => $request->priority,
             'status' => 'open',
         ]);
+
+        $adminsAndAgents = User::whereIn('role', ['admin', 'agent'])->get();
+        foreach ($adminsAndAgents as $user) {
+            $user->notify(new TicketCreatedNotification($ticket));
+        }
 
         return response()->json($ticket->load('user'), 201);
     }

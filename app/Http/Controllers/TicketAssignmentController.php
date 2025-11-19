@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Notifications\TicketAssignedNotification;
 
 class TicketAssignmentController extends Controller
 {
@@ -30,6 +31,8 @@ class TicketAssignmentController extends Controller
             'assigned_to' => $agent->id,
             'status' => 'in_progress'
         ]);
+
+        $agent->notify(new TicketAssignedNotification($ticket->load('user')));
 
         return response()->json([
             'message' => 'Ticket assigned successfully',

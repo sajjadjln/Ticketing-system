@@ -6,7 +6,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Ticket;
-
+use App\Notifications\NewCommentNotification;
 class CommentController extends Controller
 {
     /**
@@ -68,6 +68,20 @@ class CommentController extends Controller
             'user_id' => $user->id,
             'comment_text' => $request->comment_text,
         ]);
+
+        $usersToNotify = collect([$ticket->user]);
+
+        if ($ticket->assigned_to) {
+            $usersToNotify->push($ticket->assignee);
+        }
+
+        $usersToNotify = $usersToNotify->filter(function ($userToNotify) use ($user) {
+            return $userToNotify->id !== $user->id;
+        });
+
+        foreach ($usersToNotify as $userToNotify) {
+            $userToNotify->notify(new NewCommentNotification($ticket, $comment));
+        }
 
         return response()->json($comment->load('user'), 201);
     }
