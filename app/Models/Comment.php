@@ -32,6 +32,16 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function canBeEdited(): bool
+    {
+        return $this->created_at->diffInHours(now()) <= 1;
+    }
+
+    public function isAuthor(User $user): bool
+    {
+        return $this->user_id === $user->id;
+    }
+
     public function scopeForTicket($query, $ticketId)
     {
         return $query->where('ticket_id', $ticketId);
