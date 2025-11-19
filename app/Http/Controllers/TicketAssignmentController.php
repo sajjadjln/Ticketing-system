@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Notifications\TicketAssignedNotification;
+use Illuminate\Support\Facades\Log;
 
 class TicketAssignmentController extends Controller
 {
@@ -86,11 +87,13 @@ class TicketAssignmentController extends Controller
 
     private function findAvailableAgent(): ?User
     {
-        return User::whereIn('role', ['agent', 'admin'])
+        $agents = User::where('role', 'agent')
             ->withCount(['assignedTickets as active_tickets_count' => function ($query) {
                 $query->whereIn('status', ['open', 'in_progress']);
             }])
             ->orderBy('active_tickets_count')
-            ->first();
+            ->get();
+
+        return $agents->isEmpty() ? null : $agents->first();
     }
 }
