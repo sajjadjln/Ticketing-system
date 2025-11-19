@@ -387,47 +387,6 @@ User::where('role', 'agent')
 
 just import the postman collection to the postman
 
-
-### Documentation Features
-
--   **Interactive testing** of all endpoints
--   **Authentication integration** with Bearer tokens
--   **Request/response schemas**
--   **Error code documentation**
--   **Parameter descriptions**
-
-## 🚀 Deployment
-
-### Production Checklist
-
--   [ ] Update `.env` with production values
--   [ ] Set `APP_ENV=production`
--   [ ] Configure production database
--   [ ] Configure production email (Mailgun, SendGrid, etc.)
--   [ ] Set up SSL certificate
--   [ ] Configure web server (Nginx/Apache)
--   [ ] Set up monitoring and logging
-
-### Environment Variables
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
-
-DB_HOST=production-db-host
-DB_DATABASE=production_db
-DB_USERNAME=production_user
-DB_PASSWORD=production_password
-
-MAIL_MAILER=smtp
-MAIL_HOST=your-smtp-host
-MAIL_PORT=587
-MAIL_USERNAME=your-email
-MAIL_PASSWORD=your-password
-
-```
-
 ## 🤝 Contributing
 
 1. Fork the repository
