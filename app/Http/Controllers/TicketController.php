@@ -11,9 +11,7 @@ use App\Http\Requests\StoreTicketWithAttachmentsRequest;
 use App\Models\Attachment;
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -48,17 +46,6 @@ class TicketController extends Controller
         return response()->json($tickets);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTicketWithAttachmentsRequest $request)
     {
 
@@ -94,9 +81,6 @@ class TicketController extends Controller
         return response()->json($ticket->load('user'), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ticket $ticket)
     {
         $user = request()->user();
@@ -112,17 +96,6 @@ class TicketController extends Controller
         return response()->json($ticket->load(['user', 'assignee', 'comments.user']));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Ticket $ticket)
     {
         $user = $request->user();
@@ -214,9 +187,6 @@ class TicketController extends Controller
         return response()->json($tickets);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ticket $ticket)
     {
         $user = request()->user();
