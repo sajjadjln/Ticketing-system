@@ -14,6 +14,11 @@ class UserRepositoryImp implements IUserRepository
 
     public function create(array $data): User
     {
-        return User::create($data);
+        return User::create([
+            "email" => $data['email'],
+            "password" => $data['password'],
+            "name" => $data['name'],
+            "role" => "user",
+        ]);
     }
 }

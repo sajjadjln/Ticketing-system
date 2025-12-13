@@ -36,7 +36,7 @@ class AuthService implements IAuthService
     {
         $user = $this->userRepository->create(
             [
-                'username' => $username,
+                'name' => $username,
                 'password' => Hash::make($password),
                 'email' => $email,
                 'role' => 'user'
