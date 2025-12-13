@@ -16,7 +16,7 @@ class AuthService implements IAuthService
         $this->userRepository = $userRepository;
     }
 
-    public function login($email, $password): array
+    public function login(string $email, string $password): array
     {
         $user = $this->userRepository->findByEmail($email);
         if (!$user || !Hash::check($password, $user->password)) {
@@ -32,7 +32,7 @@ class AuthService implements IAuthService
         ];
     }
 
-    public function register($username, $password, $email): array
+    public function register(string $username, string $password, string $email): array
     {
         $user = $this->userRepository->create(
             [
