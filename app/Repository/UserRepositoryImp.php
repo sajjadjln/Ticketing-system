@@ -9,7 +9,7 @@ class UserRepositoryImp implements IUserRepository
 
     public function findByEmail(string $email): ?User
     {
-        return User::where("email", $email)->first();
+        return User::whereEmail($email)->first();
     }
 
     public function create(array $data): User

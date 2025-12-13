@@ -20,13 +20,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $validatedData = $request->validated();
-        $RegisterResult = $this->authService->register(
+        $authData = $this->authService->register(
             $validatedData['name'],
             $validatedData['password'],
             $validatedData['email']
         );
 
-        return (new UserResource($RegisterResult))
+        return (new UserResource($authData))
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
 
