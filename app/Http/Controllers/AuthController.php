@@ -8,19 +8,28 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-
+use App\Interfaces\IUserRepository;
 class AuthController extends Controller
 {
+    protected $userRepository;
+
+    public function __construct(IUserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function register(RegisterRequest $request)
     {
 
         $validatedData = $request->validated();
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => 'user',
-        ]);
+        $requestArray = [
+            "email" => $validatedData["email"],
+            "password" => Hash::make($validatedData["password"]),
+            "name" => $validatedData["name"],
+            "role" => "user"
+        ];
+        $user = $this->userRepository->create($requestArray);
+
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -35,7 +44,7 @@ class AuthController extends Controller
     {
 
         $validatedData = $request->validated();
-        $user = User::where('email', $validatedData['email'])->first();
+        $user = $this->userRepository->findByEmail($validatedData['email']);
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
