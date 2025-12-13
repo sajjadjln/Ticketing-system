@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AttachmentStoreRequest;
 use App\Models\Attachment;
 use App\Models\Ticket;
 use App\Models\Comment;
@@ -12,12 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class AttachmentController extends Controller
 {
-    public function store(Request $request, Ticket $ticket): JsonResponse
+    public function store(AttachmentStoreRequest $request, Ticket $ticket): JsonResponse
     {
-        $request->validate([
-            'file' => 'required|file|max:10240',
-            'comment_id' => 'nullable|exists:comments,id'
-        ]);
 
         $user = $request->user();
         
