@@ -4,57 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Models\User;
+use App\Http\Resources\UserResource;
+use App\Interfaces\IAuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+    protected $authService;
+
+    public function __construct(
+        IAuthService $authService
+    ) {
+        $this->authService = $authService;
+    }
+
     public function register(RegisterRequest $request)
     {
-
         $validatedData = $request->validated();
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
-            'role' => 'user',
-        ]);
+        $RegisterResult = $this->authService->register(
+            $validatedData['name'],
+            $validatedData['password'],
+            $validatedData['email']
+        );
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        return (new UserResource($RegisterResult))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
-        ], 201);
     }
 
     public function login(LoginRequest $request)
     {
 
         $validatedData = $request->validated();
-        $user = User::where('email', $validatedData['email'])->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
+        $userData = $this->authService->login(
+            $validatedData['email'],
+            $validatedData['password']
+        );
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user
-        ]);
+        return (new UserResource($userData))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $this->authService->logout($request->user());
 
         return response()->json(['message' => 'Logged out successfully']);
     }
