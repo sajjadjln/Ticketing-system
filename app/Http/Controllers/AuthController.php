@@ -11,12 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    protected $authService;
 
     public function __construct(
-        IAuthService $authService
+        protected readonly IAuthService $authService
     ) {
-        $this->authService = $authService;
     }
 
     public function register(RegisterRequest $request)

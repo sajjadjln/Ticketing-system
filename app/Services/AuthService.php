@@ -10,10 +10,9 @@ use Illuminate\Validation\ValidationException;
 
 class AuthService implements IAuthService
 {
-    protected $userRepository;
-    public function __construct(IUserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        protected readonly IUserRepository $userRepository
+    ) {
     }
 
     public function login(string $email, string $password): array
