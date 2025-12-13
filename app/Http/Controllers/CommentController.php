@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -73,12 +74,8 @@ class CommentController extends Controller
         return response()->json($comment->load('user'), 201);
     }
 
-    public function update(Request $request, Ticket $ticket, Comment $comment): JsonResponse
+    public function update(CommentRequest $request, Ticket $ticket, Comment $comment): JsonResponse
     {
-        $request->validate([
-            'comment_text' => 'required|string|max:1000',
-        ]);
-
         $user = $request->user();
 
         if ($comment->user_id !== $user->id) {
