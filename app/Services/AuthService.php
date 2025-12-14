@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Interfaces\IAuthService;
-use App\Interfaces\IUserRepository;
+use App\Interfaces\AuthServiceContract;
+use App\Interfaces\UserRepositoryContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class AuthService implements IAuthService
+class AuthService implements AuthServiceContract
 {
     public function __construct(
-        protected readonly IUserRepository $userRepository
+        protected readonly UserRepositoryContract $userRepository
     ) {
     }
 
@@ -23,12 +23,7 @@ class AuthService implements IAuthService
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-        $token = $user->createToken('auth_token')->plainTextToken;
-        return [
-            'token' => $token,
-            'user' => $user,
-            'tokenType' => 'Bearer'
-        ];
+        return $this->generateAuthResponse($user);
     }
 
     public function register(string $username, string $password, string $email): array
@@ -36,20 +31,26 @@ class AuthService implements IAuthService
         $user = $this->userRepository->create(
             [
                 'name' => $username,
-                'password' => Hash::make($password),
+                'password' => $password,
                 'email' => $email,
                 'role' => 'user'
             ]
         );
-        $token = $user->createToken('auth_token')->plainTextToken;
+        return $this->generateAuthResponse($user);
+    }
+    public function logout(User $user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
+
+    private function generateAuthResponse(User $user, string $tokenName = 'auth_token'): array
+    {
+        $token = $user->createToken($tokenName)->plainTextToken;
+
         return [
             'token' => $token,
             'user' => $user,
             'token_type' => 'Bearer'
         ];
-    }
-    public function logout(User $user): void
-    {
-        $user->currentAccessToken()->delete();
     }
 }

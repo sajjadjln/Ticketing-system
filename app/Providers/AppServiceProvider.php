@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Interfaces\IUserRepository;
+use App\Interfaces\UserRepositoryContract;
 use App\Repository\UserRepositoryImp;
 use Illuminate\Support\ServiceProvider;
-use App\Interfaces\IAuthService;
+use App\Interfaces\AuthServiceContract;
 use App\Services\AuthService;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(IUserRepository::class, UserRepositoryImp::class);
-        $this->app->singleton(IAuthService::class, AuthService::class);
+        $this->app->singleton(UserRepositoryContract::class, UserRepositoryImp::class);
+        $this->app->singleton(AuthServiceContract::class, AuthService::class);
     }
 
     /**

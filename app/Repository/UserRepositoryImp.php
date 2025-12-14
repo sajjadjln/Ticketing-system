@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Models\User;
-use App\Interfaces\IUserRepository;
-class UserRepositoryImp implements IUserRepository
+use App\Interfaces\UserRepositoryContract;
+class UserRepositoryImp implements UserRepositoryContract
 {
 
     public function findByEmail(string $email): ?User

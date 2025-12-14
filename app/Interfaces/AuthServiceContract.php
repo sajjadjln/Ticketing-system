@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 
 use App\Models\User;
-interface IAuthService
+interface AuthServiceContract
 {
     public function login(string $email, string $password): array;
     public function logout(User $user): void;

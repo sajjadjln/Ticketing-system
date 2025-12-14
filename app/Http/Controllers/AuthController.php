@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
-use App\Interfaces\IAuthService;
+use App\Interfaces\AuthServiceContract;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
 
     public function __construct(
-        protected readonly IAuthService $authService
+        protected readonly AuthServiceContract $authService
     ) {
     }
 
